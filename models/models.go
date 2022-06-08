@@ -10,6 +10,6 @@ type URL struct {
 }
 
 type EncodeUrls struct {
-	EncodeUrl string `json:"encodedUrl"`
-	ShortUrl  string `json:"shortUrl"`
+	EncodeUrl string `json:"encodedUrl" bson:"encodedUrl"`
+	ShortUrl  string `json:"shortUrl" bson:"shortUrl"`
 }
