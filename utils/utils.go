@@ -5,6 +5,11 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
+)
+
+const (
+	ENCODED_URLS = "encoded_urls"
 )
 
 func handlerError(err error) {
@@ -48,4 +53,27 @@ func HandleHttpErrors(w http.ResponseWriter, customErrMsg string, statusCode int
 		return true
 	}
 	return
+}
+
+func ValidateUrl(urlString string) error {
+	u, err := url.Parse(urlString)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return err
+	}
+
+	_, err = url.ParseRequestURI(urlString)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func SetCorsHeaders(f http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Headers:", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		f(w, r)
+	}
 }
