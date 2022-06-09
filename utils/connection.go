@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"os"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,21 +12,15 @@ import (
 )
 
 const (
-	DATABASE       = "url_shortner"
-	CONNECTION_URL = "mongodb+srv://user:userpassword@mflix.uwgun.mongodb.net/?retryWrites=true&w=majority"
+	DATABASE = "url_shortner"
 )
 
 var DatabaseClient *mongo.Client
 
 // ConnectDB will establish connection with mongodb
 func ConnectDB() (client *mongo.Client) {
-	// Set credentials
-	// credentials := options.Credential{
-	// 	Username: os.Getenv("MONGODB_USER"),
-	// 	Password: os.Getenv("MONGODB_PASSWORD"),
-	// }
 	// Set client options
-	clientOptions := options.Client().ApplyURI(CONNECTION_URL)
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URL"))
 
 	// Connect to mongodb
 	client, err := mongo.Connect(context.TODO(), clientOptions)
